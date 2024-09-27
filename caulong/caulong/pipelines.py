@@ -14,8 +14,7 @@ import csv
 class MongoDBCauLongPipeline:
     def __init__(self):
         # Lấy URI từ biến môi trường
-        mongo_uri = os.getenv("MONGO_URI", "mongodb://mongo:27017")
-        self.client = pymongo.MongoClient(mongo_uri)  # Kết nối đến MongoDB
+        self.client = pymongo.MongoClient('mongodb://host.docker.internal:27017')
         self.db = self.client['dbcaulong']  # Create Database      
 
     def process_item(self, item, spider):
