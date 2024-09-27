@@ -1,22 +1,19 @@
-version: '3'
+version: '3.8'
 
 services:
   scrapy:
     build: .
+    volumes:
+      - .:/app
     depends_on:
-      - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017  # Đảm bảo rằng giá trị này là chính xác
-    networks:
-      - scrapy_network
+      - mongodb
 
-  mongo:
-    image: mongo
+  mongodb:
+    image: mongo:latest
     ports:
       - "27017:27017"
-    networks:
-      - scrapy_network
+    volumes:
+      - mongo_data:/data/db
 
-networks:
-  scrapy_network:
-    driver: bridge
+volumes:
+  mongo_data:
