@@ -26,11 +26,33 @@ class MycaulongSpider(scrapy.Spider):
         item['gia'] = response.xpath('normalize-space(string(//div[@class="price-box clearfix"]/span[1]/span/span))').get()
         item['thuongHieu'] = response.xpath('normalize-space(string(//div[@class="inventory_quantity"]/span[1]/a))').get()
         item['tinhTrang'] = response.xpath('normalize-space(string(//div[@class="inventory_quantity"]/span[3]/span[2]))').get()
-        item['trinhDo'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[1]/td[2]))').get()
-        item['noiDung'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[2]/td[2]))').get()
-        item['phongCach'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[3]/td[2]))').get()
-        item['doCung'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[4]/td[2]))').get()
-        item['diemCanBang'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[5]/td[2]))').get()
-        item['trongLuong'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[6]/td[2]))').get()
+               item['trinhDo'] = response.xpath('normalize-space(//td[b[contains(text(), "Trình Độ Chơi:")]]/following-sibling::td/text())').get()
+        item['noiDung'] = response.xpath('normalize-space(//td[b[contains(text(), "Nội Dung Chơi:")]]/following-sibling::td/text())').get()
+        item['phongCach'] = response.xpath('normalize-space(//td[b[contains(text(), "Phong Cách Chơi:")]]/following-sibling::td/text())').get()
+        item['doCung'] = response.xpath('normalize-space(//td[b[contains(text(), "Độ Cứng Đũa:")]]/following-sibling::td/text())').get()
+        item['diemCanBang'] = response.xpath('normalize-space(//td[b[contains(text(), "Điểm Cân Bằng:")]]/following-sibling::td/text())').get()
+        item['trongLuong'] = response.xpath('normalize-space(//td[b[contains(text(), "Trọng Lượng:")]]/following-sibling::td/text())').get()
+
+        
+        # item['trinhDo'] = response.xpath('//td[contains(text(), "Trình Độ Chơi:")]/following-sibling::td/text()').get()
+        # item['noiDung'] = response.xpath('normalize-space(//td[contains(text(), "Nội Dung Chơi")]/following-sibling::td[1]/text())').get()
+        # item['phongCach'] = response.xpath('normalize-space(//td[contains(text(), "Phong Cách Chơi")]/following-sibling::td[1]/text())').get()
+        # item['doCung'] = response.xpath('normalize-space(//td[contains(text(), "Độ Cứng Đũa")]/following-sibling::td[1]/text())').get()
+        # item['diemCanBang'] = response.xpath('normalize-space(//td[contains(text(), "Điểm Cân Bằng")]/following-sibling::td[1]/text())').get()
+        # item['trongLuong'] = response.xpath('normalize-space(//td[contains(text(), "Trọng Lượng")]/following-sibling::td[1]/text())').get()
+        item['trinhDo'] = item['trinhDo'].strip() if item['trinhDo'] else None
+        item['noiDung'] = item['noiDung'].strip() if item['noiDung'] else None
+        item['phongCach'] = item['phongCach'].strip() if item['phongCach'] else None
+        item['doCung'] = item['doCung'].strip() if item['doCung'] else None
+        item['diemCanBang'] = item['diemCanBang'].strip() if item['diemCanBang'] else None
+        item['trongLuong'] = item['trongLuong'].strip() if item['trongLuong'] else None
+        # item['trinhDo'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[1]/td[2]))').get()
+        # item['noiDung'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[2]/td[2]))').get()
+        # item['phongCach'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[3]/td[2]))').get()
+        # item['doCung'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[4]/td[2]))').get()
+        # item['diemCanBang'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[5]/td[2]))').get()
+        # item['trongLuong'] = response.xpath('normalize-space(string(//*[@id="tab_thong_so"]/div/table/tbody/tr[6]/td[2]))').get()
         item['thongTin'] = response.xpath('normalize-space(string(//*[@id="content"]/div/div/div/p/span/span))').get()
+        yield item
+
         yield item
