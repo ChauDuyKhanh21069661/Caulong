@@ -6,26 +6,30 @@
 import scrapy
 import pymongo
 import json
-import os  # Thêm import os để sử dụng biến môi trường
+# from bson.objectid import ObjectId
+# useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 import csv
+import os
+
 
 class MongoDBCauLongPipeline:
     def __init__(self):
-        # Lấy URI từ biến môi trường
-        mongo_uri = os.getenv("MONGO_URI", "mongodb://mongo:27017")
-        self.client = pymongo.MongoClient(mongo_uri)  # Kết nối đến MongoDB
-        self.db = self.client['dbcaulong']  # Create Database      
-
+        self.client = pymongo.MongoClient('mongodb://host.docker.internal:27017')
+        self.db = self.client['dbcaulong'] #Create Database      
+        pass
     def process_item(self, item, spider):
-        collection = self.db['tblcaulong']  # Create Collection or Table
+        print(f"Processing item: {item}")  # Log item đang xử lý
+        collection = self.db['tblcaulong']  # Tạo collection
         try:
-            collection.insert_one(dict(item))
+            collection.insert_one(dict(item))  # Chèn item vào collection
+            print(f"Inserted item into MongoDB: {item}")  # Log sau khi chèn thành công
             return item
         except Exception as e:
+            print(f"Error inserting item: {e}")  # Log lỗi nếu có
             raise DropItem(f"Error inserting item: {e}")
-
+        
 class JsonDBCauLongPipeline:
     def process_item(self, item, spider):
         with open('caulong.json', 'a', encoding='utf-8') as file:
@@ -36,10 +40,11 @@ class JsonDBCauLongPipeline:
 class CSVDBCauLongPipeline:
     def process_item(self, item, spider):
         with open('caulong.csv', 'a', encoding='utf-8', newline='') as csvfile:
-            fieldnames = ['ma', 'tensp', 'gia', 'thuongHieu', 'courseUrl', 'tinhTrang', 'trinhDo', 'noiDung', 'phongCach', 'doCung', 'diemCanBang', 'trongLuong', 'thongTin']
+            fieldnames = ['ma','tensp','gia','thuongHieu','courseUrl','tinhTrang','trinhDo','noiDung','phongCach','doCung','diemCanBang','trongLuong','thongTin']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',')
             # Kiểm tra nếu file CSV chưa có header thì ghi header
             if csvfile.tell() == 0:
                 writer.writeheader()
-            writer.writerow(dict(item))  # Sử dụng dict(item) để ghi vào CSV
+            writer.writerow(item)
         return item
+    pass
